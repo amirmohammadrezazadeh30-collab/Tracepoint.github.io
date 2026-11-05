@@ -3,66 +3,201 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080b11">
+  <meta name="theme-color" content="#f4f6f8">
   <meta name="description" content="A.R.M automotive reference — car specifications, brands and engineering stories">
   <title>A.R.M — Automotive Reference</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap">
+  <script>
+    /* Runs before first paint: restore theme + language (no flash) and define image fallbacks. */
+    (function () {
+      try {
+        if (localStorage.getItem("arm-theme") === "dark") document.documentElement.classList.add("dark-mode");
+        if (localStorage.getItem("arm-language") === "en") { document.documentElement.lang = "en"; document.documentElement.dir = "ltr"; }
+      } catch (e) {}
+    })();
+    function armLogoFail(img) {
+      if (!img.dataset.retry) { img.dataset.retry = "1"; img.src = "Tracepoint.png"; return; }
+      img.style.display = "none";
+      var f = img.nextElementSibling; if (f) f.style.display = "grid";
+    }
+    function armImgFail(img) {
+      var i = document.createElement("i");
+      i.className = "brand-emblem " + (img.getAttribute("data-fallback-class") || "");
+      i.textContent = img.getAttribute("data-fallback") || "";
+      img.replaceWith(i);
+    }
+  </script>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
-  <header class="site-header arm-header">
-    <a class="brand arm-brand" href="index.html" aria-label="ARM home">
-      <img class="arm-logo" src="assets/arm-logo.png" alt="ARM" onerror="if(!this.dataset.root){this.dataset.root='1';this.src='arm-logo.png'}else{this.style.display='none';this.nextElementSibling.style.display='grid'}">
-      <span class="arm-fallback" aria-hidden="true">ARM</span>
+  <header class="arm-header">
+    <a class="arm-brand" href="index.html" aria-label="A.R.M">
+      <img class="arm-logo" src="assets/Tracepoint.png" alt="A.R.M" onerror="armLogoFail(this)"><span class="arm-fallback">ARM</span>
     </a>
     <form class="header-search" id="headerSearchForm" role="search">
-      <input id="headerSearchInput" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="جست‌وجوی برند یا مدل..." aria-label="جست‌وجوی خودرو">
-      <span class="search-submit-hint" aria-hidden="true">↵</span>
+      <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <input id="headerSearchInput" type="search" data-i18n-placeholder="searchPlaceholder" data-i18n-aria="searchPlaceholder" placeholder="جست‌وجوی برند یا مدل..." aria-label="جست‌وجوی برند یا مدل...">
+      <kbd class="search-kbd" aria-hidden="true">Ctrl K</kbd>
     </form>
-    <nav class="main-nav arm-nav" aria-label="ناوبری اصلی">
-      <div class="nav-dropdown-wrap"><button class="nav-link category-trigger" type="button">دسته‌بندی و فیلترها <span>⌄</span></button>
-        <div class="category-dropdown"><a href="#catalog">همه خودروها</a><a href="#brand-ribbon">برندها</a><a href="#quick-categories">نوع خودرو</a><a href="#catalog">جست‌وجو و فیلتر</a></div>
-      </div>
-      <a class="nav-link brand-nav-link" href="#brand-ribbon">برندهای محبوب</a>
-      <a class="nav-link" href="#editorial">ویژه‌ها</a>
-    </nav>
-    <div class="header-actions"><button class="language-toggle" id="languageToggle" type="button" aria-label="تغییر زبان">EN</button><a class="login-link" href="auth.html" data-i18n="login">ورود / ثبت‌نام</a></div>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="تغییر حالت روشن و تاریک"><span class="theme-glyph">☾</span></button>
+      <button class="language-toggle" id="languageToggle" type="button" data-i18n-aria="langToggle" aria-label="تغییر زبان">EN</button>
+      <span class="actions-sep" aria-hidden="true"></span>
+      <a class="login-link" href="auth.html" data-i18n-aria="login" aria-label="ورود / ثبت‌نام"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M4.8 20c.6-4 3.1-6 7.2-6s6.6 2 7.2 6"></path></svg><span class="login-text" data-i18n="login">ورود / ثبت‌نام</span></a>
+    </div>
   </header>
 
+  <nav class="arm-mega-nav" aria-label="Main">
+    <div class="arm-mega-nav-inner">
+      <div class="arm-nav-item has-mega">
+        <a class="arm-nav-link is-current" href="#catalog"><span class="nav-icon" aria-hidden="true">⌘</span><span data-i18n="navCars">ماشین‌ها</span><span class="nav-chevron" aria-hidden="true">⌄</span></a>
+        <div class="arm-mega-panel cars-panel">
+          <div class="mega-intro"><span class="mega-eyebrow">EXPLORE THE COLLECTION</span><h3 data-i18n="megaCarsTitle">ماشین بعدیت رو پیدا کن</h3><p data-i18n="megaCarsText">با سبک رانندگی و کلاس ماشین، راهت رو پیدا کن.</p><a class="mega-all-link" href="#catalog" data-category="all" data-i18n="megaCarsAll">دیدن همهٔ ماشین‌ها <span>←</span></a></div>
+          <div class="mega-link-grid">
+            <button type="button" data-category="Coupe"><span class="mega-link-icon" aria-hidden="true">↗</span><span><b data-i18n="catCoupe">کوپه و اسپرت</b><small data-i18n="catCoupeSub">هیجان و هندلینگ</small></span></button>
+            <button type="button" data-category="Sedan"><span class="mega-link-icon" aria-hidden="true">▤</span><span><b data-i18n="catSedan">سدان</b><small data-i18n="catSedanSub">تعادل و راحتی</small></span></button>
+            <button type="button" data-category="Roadster"><span class="mega-link-icon" aria-hidden="true">⌁</span><span><b data-i18n="catRoadster">رودستر و کروک</b><small data-i18n="catRoadsterSub">رانندگی زیر آسمون باز</small></span></button>
+            <button type="button" data-category="Electric"><span class="mega-link-icon" aria-hidden="true">ϟ</span><span><b data-i18n="catElectric">ماشین‌های برقی</b><small data-i18n="catElectricSub">تکنولوژی نسل جدید</small></span></button>
+            <button type="button" data-category="track"><span class="mega-link-icon" aria-hidden="true">◎</span><span><b data-i18n="catTrack">مخصوص پیست</b><small data-i18n="catTrackSub">پرفورمنس خالص</small></span></button>
+            <button type="button" data-category="supercar"><span class="mega-link-icon" aria-hidden="true">✦</span><span><b data-i18n="catSupercar">سوپراسپرت</b><small data-i18n="catSupercarSub">اوج مهندسی و قدرت</small></span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="arm-nav-item has-mega">
+        <a class="arm-nav-link" href="#brand-ribbon"><span class="nav-icon" aria-hidden="true">◇</span><span data-i18n="navBrands">برندها</span><span class="nav-chevron" aria-hidden="true">⌄</span></a>
+        <div class="arm-mega-panel brands-panel">
+          <div class="mega-intro"><span class="mega-eyebrow">THE MARQUE DIRECTORY</span><h3 data-i18n="megaBrandsTitle">هر نشان، یه دنیا</h3><p data-i18n="megaBrandsText">با سازنده‌های معروف و فلسفهٔ مهندسی‌شون آشنا شو.</p><a class="mega-all-link" href="#brand-ribbon" data-i18n="megaBrandsAll">برو به فهرست برندها <span>←</span></a></div>
+          <div class="mega-brand-grid">
+            <a href="#catalog" data-brand="Porsche"><span class="brand-monogram porsche-mark">P</span><b>Porsche</b><small data-i18n="countryGermany">آلمان</small></a>
+            <a href="#catalog" data-brand="BMW"><span class="brand-monogram bmw-mark">BMW</span><b>BMW</b><small data-i18n="countryGermany">آلمان</small></a>
+            <a href="#catalog" data-brand="Mercedes-AMG"><span class="brand-monogram mercedes-mark">✳</span><b>Mercedes-AMG</b><small data-i18n="countryGermany">آلمان</small></a>
+            <a href="#catalog" data-brand="Ferrari"><span class="brand-monogram ferrari-mark">F</span><b>Ferrari</b><small data-i18n="countryItaly">ایتالیا</small></a>
+            <a href="#catalog" data-brand="Audi"><span class="brand-monogram audi-mark">○○○○</span><b>Audi</b><small data-i18n="countryGermany">آلمان</small></a>
+            <a href="#catalog" data-brand="Tesla"><span class="brand-monogram tesla-mark">T</span><b>Tesla</b><small data-i18n="countryUSA">آمریکا</small></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="arm-nav-item has-mega">
+        <a class="arm-nav-link" href="#editorial"><span class="nav-icon" aria-hidden="true">⚙</span><span data-i18n="navTech">دانشنامهٔ فنی</span><span class="nav-chevron" aria-hidden="true">⌄</span></a>
+        <div class="arm-mega-panel tech-panel">
+          <div class="mega-intro"><span class="mega-eyebrow">ENGINEERING, EXPLAINED</span><h3 data-i18n="megaTechTitle">زیر پوست ماشین</h3><p data-i18n="megaTechText">تکنولوژی‌هایی که حس رانندگی رو می‌سازن؛ از موتور تا سیستم‌های هوشمند.</p></div>
+          <div class="mega-tech-list">
+            <a href="#editorial"><span>01</span><div><b data-i18n="tech1">موتور و توربوشارژر</b><small data-i18n="tech1Sub">قدرت از کجا میاد؟</small></div><i aria-hidden="true">↗</i></a>
+            <a href="#editorial"><span>02</span><div><b data-i18n="tech2">گیربکس و انتقال قدرت</b><small data-i18n="tech2Sub">مهندسی حرکت</small></div><i aria-hidden="true">↗</i></a>
+            <a href="#editorial" data-category="Electric"><span>03</span><div><b data-i18n="tech3">ماشین‌های برقی</b><small data-i18n="tech3Sub">باتری، موتور و آینده</small></div><i aria-hidden="true">↗</i></a>
+            <a href="#brand-showcase"><span>04</span><div><b data-i18n="tech4">فلسفهٔ مهندسی برندها</b><small data-i18n="tech4Sub">DNA هر سازنده</small></div><i aria-hidden="true">↗</i></a>
+          </div>
+        </div>
+      </div>
+
+      <a class="arm-nav-link" href="#catalog"><span class="nav-icon" aria-hidden="true">⇄</span><span data-i18n="navCompare">مقایسهٔ ماشین‌ها</span></a>
+      <a class="arm-nav-link nav-extra" href="#brand-showcase"><span class="nav-icon" aria-hidden="true">◷</span><span data-i18n="navHistory">تاریخچه و برندها</span></a>
+      <a class="arm-nav-link nav-extra" href="#editorial"><span class="nav-icon" aria-hidden="true">▤</span><span data-i18n="navMagazine">مجلهٔ ماشین</span></a>
+      <span class="nav-status"><i aria-hidden="true"></i><span data-i18n="navStatus">مرجع ماشین‌ها</span></span>
+    </div>
+  </nav>
+
   <main id="app">
-    <!-- بخش هیروی قدیمی با عدد 01/12 عمداً حذف شده؛ ایده‌ی بعدی این قسمت را بعداً اینجا اضافه می‌کنیم. -->
-    <section class="feature-slider" aria-label="خودروهای منتخب">
-      <div class="feature-slide active" style="--slide-image:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1800&q=90')">
-        <div class="feature-overlay"></div><div class="feature-copy"><span class="feature-kicker">PORSCHE · DRIVER'S ICON</span><h1>مهندسی برای <em>لذت رانندگی</em></h1><p>از افسانه‌های پیست تا خودروهای جاده؛ دنیای ماشین‌ها را دقیق‌تر بشناس.</p><a class="feature-cta" href="index.html?car=porsche-911">کشف Porsche 911 <span>↗</span></a></div><div class="feature-model">911<small>CARRERA GTS</small></div>
+    <section class="feature-slider" aria-label="Featured cars">
+      <div class="feature-slide active" style="--slide-image:url('assets/banners/porche.avif')">
+        <div class="feature-overlay"></div>
+        <div class="feature-copy"><span class="feature-kicker">PORSCHE · DRIVER'S ICON</span><h1 data-i18n="s1Title">مهندسی برای <em>لذت رانندگی</em></h1><p data-i18n="s1Text">از افسانه‌های پیست تا ماشین‌های جاده؛ دنیای ماشین رو دقیق‌تر بشناس.</p><a class="feature-cta" href="index.html?car=porsche-911" data-i18n="s1Cta">دیدن Porsche 911 <span>↗</span></a></div>
+        <div class="feature-model">911<small>CARRERA GTS</small></div>
       </div>
-      <div class="feature-slide" style="--slide-image:url('https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1800&q=90')">
-        <div class="feature-overlay"></div><div class="feature-copy"><span class="feature-kicker">BMW M · TRACK DNA</span><h1>قدرتی با امضای <em>M</em></h1><p>تعادل میان عملکرد روزمره و هیجان رانندگی اسپرت.</p><a class="feature-cta" href="index.html?car=bmw-m3-g80">کشف BMW M3 <span>↗</span></a></div><div class="feature-model">M3<small>COMPETITION</small></div>
+      <div class="feature-slide" style="--slide-image:url('assets/banners/BMW.avif')">
+        <div class="feature-overlay"></div>
+        <div class="feature-copy"><span class="feature-kicker">BMW M · TRACK DNA</span><h1 data-i18n="s2Title">قدرتی با امضای <em>M</em></h1><p data-i18n="s2Text">تعادل بین یه ماشین روزمره و هیجان رانندگی اسپرت.</p><a class="feature-cta" href="index.html?car=bmw-m3-g80" data-i18n="s2Cta">دیدن BMW M3 <span>↗</span></a></div>
+        <div class="feature-model">M3<small>COMPETITION</small></div>
       </div>
-      <div class="feature-slide" style="--slide-image:url('https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1800&q=90')">
-        <div class="feature-overlay"></div><div class="feature-copy"><span class="feature-kicker">MERCEDES-AMG · PERFORMANCE</span><h1>لوکس، با قلبی <em>وحشی</em></h1><p>روایت فناوری، طراحی و قدرت در خودروهای پرفورمنس.</p><a class="feature-cta" href="index.html?car=mercedes-amg-gt">کشف Mercedes-AMG <span>↗</span></a></div><div class="feature-model">AMG<small>PERFORMANCE</small></div>
+      <div class="feature-slide" style="--slide-image:url('assets/banners/Benz.avif')">
+        <div class="feature-overlay"></div>
+        <div class="feature-copy"><span class="feature-kicker">MERCEDES-AMG · PERFORMANCE</span><h1 data-i18n="s3Title">لوکس، با قلبی <em>وحشی</em></h1><p data-i18n="s3Text">داستان تکنولوژی، طراحی و قدرت تو ماشین‌های پرفورمنس.</p><a class="feature-cta" href="index.html?car=mercedes-amg-gt" data-i18n="s3Cta">دیدن Mercedes-AMG <span>↗</span></a></div>
+        <div class="feature-model">AMG<small>PERFORMANCE</small></div>
       </div>
-      <div class="feature-controls"><div class="feature-dots"><button class="active" aria-label="اسلاید ۱" data-feature-slide="0"></button><button aria-label="اسلاید ۲" data-feature-slide="1"></button><button aria-label="اسلاید ۳" data-feature-slide="2"></button></div><div class="feature-arrows"><button type="button" data-feature-prev aria-label="قبلی">‹</button><button type="button" data-feature-next aria-label="بعدی">›</button></div></div>
+      <div class="feature-controls">
+        <div class="feature-dots"><button class="active" aria-label="1" data-feature-slide="0"></button><button aria-label="2" data-feature-slide="1"></button><button aria-label="3" data-feature-slide="2"></button></div>
+        <div class="feature-arrows"><button type="button" data-feature-prev data-i18n-aria="prevSlide" aria-label="قبلی"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button><button type="button" data-feature-next data-i18n-aria="nextSlide" aria-label="بعدی"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button></div>
+      </div>
     </section>
-    <section class="brand-ribbon" id="brand-ribbon"><div class="brand-ribbon-heading"><span>THE MARQUE DIRECTORY</span><h2>برندهای افسانه‌ای</h2><p>نشان هر سازنده، داستانی از مهندسی</p></div><div class="brand-logos">
-      <a href="#catalog" data-brand="BMW"><img src="assets/brands/bmw.svg" alt="BMW" onerror="this.outerHTML='<i class='brand-emblem bmw'>BMW</i>'"><span>BMW</span></a>
-      <a href="#catalog" data-brand="Mercedes-AMG"><img src="assets/brands/mercedes-benz.svg" alt="Mercedes-Benz" onerror="this.outerHTML='<i class='brand-emblem'>MB</i>'"><span>Mercedes-Benz</span></a>
-      <a href="#catalog" data-brand="Porsche"><img src="assets/brands/porsche.svg" alt="Porsche" onerror="this.outerHTML='<i class='brand-emblem porsche'>P</i>'"><span>Porsche</span></a>
-      <a href="#catalog" data-brand="Audi"><img src="assets/brands/audi.svg" alt="Audi" onerror="this.outerHTML='<i class='brand-emblem audi'>○○○○</i>'"><span>Audi</span></a>
-      <a href="#catalog" data-brand="Ferrari"><img src="assets/brands/ferrari.svg" alt="Ferrari" onerror="this.outerHTML='<i class='brand-emblem ferrari'>F</i>'"><span>Ferrari</span></a>
-      <a href="#catalog" data-brand="Lamborghini"><img src="assets/brands/lamborghini.svg" alt="Lamborghini" onerror="this.outerHTML='<i class='brand-emblem lambo'>L</i>'"><span>Lamborghini</span></a>
-      <a href="#catalog" data-brand="Tesla"><img src="assets/brands/tesla.svg" alt="Tesla" onerror="this.outerHTML='<i class='brand-emblem tesla'>T</i>'"><span>Tesla</span></a>
-    </div></section>
-    <section class="quick-categories" id="quick-categories"><div><p class="section-kicker">FIND YOUR DRIVE</p><h2>از چه دنیایی خوشت می‌آید؟</h2></div><div class="category-chips"><button class="selected" data-category="all">همه خودروها</button><button data-category="Coupe">کوپه و اسپرت</button><button data-category="Sedan">سدان</button><button data-category="Roadster">رودستر و روباز</button><button data-category="Electric">برقی</button><button data-category="track">مخصوص پیست</button><button data-category="desert">آفرود و کویر</button></div></section>
-    <section class="catalog-section" id="catalog"><div class="section-heading"><div><p class="section-kicker" data-i18n="collectionKicker">THE COLLECTION</p><h2 data-i18n="collectionTitle">خودروها را دقیق‌تر بشناس</h2><p class="section-subtitle" data-i18n="collectionSubtitle">مدل موردعلاقه‌ات را پیدا کن و مشخصاتش را بررسی کن.</p></div><span class="result-count" id="resultCount">12 خودرو</span></div>
-      <div class="toolbar"><label class="search-box"><span class="search-icon" aria-hidden="true">⌕</span><input id="searchInput" type="search" autocomplete="off" data-i18n-placeholder="searchPlaceholder" placeholder="جست‌وجوی برند یا مدل..."><kbd>⌘ K</kbd></label><label class="filter-label"><span data-i18n="brandFilter">برند</span><select id="brandFilter" aria-label="فیلتر برند"><option value="all" data-i18n="allBrands">همه برندها</option></select></label><label class="filter-label"><span data-i18n="sortLabel">ترتیب</span><select id="sortSelect"><option value="featured" data-i18n="sortFeatured">پیشنهادی</option><option value="name" data-i18n="sortName">نام خودرو</option><option value="year" data-i18n="sortYear">سال تولید</option><option value="power" data-i18n="sortPower">قدرت موتور</option></select></label></div>
-      <div class="car-grid" id="carGrid" aria-live="polite"></div><div class="empty-state hidden" id="emptyState"><div class="empty-icon">⌕</div><h3 data-i18n="emptyTitle">خودرویی پیدا نشد</h3><p data-i18n="emptyText">عبارت جست‌وجو یا فیلتر برند را تغییر بده.</p><button class="button button-secondary" id="resetFilters" data-i18n="resetFilters">پاک کردن فیلترها</button></div><nav class="pagination" id="pagination" aria-label="صفحه‌بندی"></nav>
+
+    <section class="brand-ribbon" id="brand-ribbon">
+      <div class="brand-ribbon-heading"><span>THE MARQUE DIRECTORY</span><h2 data-i18n="ribbonTitle">برندهای افسانه‌ای</h2><p data-i18n="ribbonText">نشان هر سازنده، یه داستان از مهندسی</p></div>
+      <div class="brand-logos">
+        <a href="#catalog" data-brand="BMW"><img src="assets/brands/bmw.svg" alt="BMW" data-fallback="BMW" data-fallback-class="bmw" onerror="armImgFail(this)"><span>BMW</span></a>
+        <a href="#catalog" data-brand="Mercedes-AMG"><img src="assets/brands/mercedes-benz.svg" alt="Mercedes-AMG" data-fallback="MB" onerror="armImgFail(this)"><span>Mercedes-AMG</span></a>
+        <a href="#catalog" data-brand="Porsche"><img src="assets/brands/porsche.svg" alt="Porsche" data-fallback="P" data-fallback-class="porsche" onerror="armImgFail(this)"><span>Porsche</span></a>
+        <a href="#catalog" data-brand="Audi"><img src="assets/brands/audi.svg" alt="Audi" data-fallback="○○○○" data-fallback-class="audi" onerror="armImgFail(this)"><span>Audi</span></a>
+        <a href="#catalog" data-brand="Ferrari"><img src="assets/brands/ferrari.svg" alt="Ferrari" data-fallback="F" data-fallback-class="ferrari" onerror="armImgFail(this)"><span>Ferrari</span></a>
+        <a href="#catalog" data-brand="Lamborghini"><img src="assets/brands/lamborghini.png" alt="Lamborghini" data-fallback="L" data-fallback-class="lambo" onerror="armImgFail(this)"><span>Lamborghini</span></a>
+        <a href="#catalog" data-brand="Tesla"><img src="assets/brands/tesla.svg" alt="Tesla" data-fallback="T" data-fallback-class="tesla" onerror="armImgFail(this)"><span>Tesla</span></a>
+      </div>
     </section>
-    <section class="editorial-row" id="editorial"><div class="editorial-heading"><div><p class="section-kicker">THE DRIVER'S JOURNAL</p><h2>بیشتر از یک ماشین</h2><p>مسیرها، فناوری‌ها و لحظه‌هایی که خودرو را خاص می‌کنند.</p></div></div><div class="editorial-cards"><a class="editorial-card" href="#catalog"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=85" alt="جاده کوهستانی"><span>OPEN ROAD</span><strong>فراتر از افق</strong><small>خودروهای مناسب سفرهای طولانی</small><i>↗</i></a><a class="editorial-card" href="#catalog"><img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=800&q=85" alt="خودروی اسپرت"><span>TRACK CULTURE</span><strong>زندگی در پیست</strong><small>وقتی هر ثانیه اهمیت دارد</small><i>↗</i></a><a class="editorial-card" href="#catalog"><img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=85" alt="خودروی برقی"><span>THE NEXT ERA</span><strong>عصر الکتریکی</strong><small>نگاهی به آینده‌ی عملکرد</small><i>↗</i></a></div></section>
-    <section class="brand-showcase"><div class="editorial-heading"><div><p class="section-kicker">ENGINEERING DNA</p><h2>هر برند، یک فلسفه</h2><p>از مهندسی دقیق تا هیجان خالص مسابقه.</p></div></div><div class="showcase-grid"><a href="#catalog" data-brand="BMW"><span>PRECISION & BALANCE</span><b>BMW M</b><small>عملکرد اسپرت با تمرکز بر راننده</small><i>↗</i></a><a href="#catalog" data-brand="Mercedes-AMG"><span>LUXURY PERFORMANCE</span><b>Mercedes-AMG</b><small>قدرت و آسایش در یک تجربه</small><i>↗</i></a><a href="#catalog" data-brand="Porsche"><span>RACE-BRED ICON</span><b>Porsche</b><small>میراث پیست در جاده</small><i>↗</i></a><a href="#catalog" data-brand="Audi"><span>PROGRESS THROUGH TECH</span><b>Audi Sport</b><small>فناوری و کشش هوشمند</small><i>↗</i></a><a href="#catalog" data-brand="Ferrari"><span>ITALIAN EMOTION</span><b>Ferrari</b><small>هیجان و مهندسی ایتالیایی</small><i>↗</i></a><a href="#catalog" data-brand="Tesla"><span>ELECTRIC PERFORMANCE</span><b>Tesla</b><small>شتاب الکتریکی و نرم‌افزار</small><i>↗</i></a></div></section>
-    <section class="about-strip" id="about"><div class="about-icon">◎</div><div><p class="section-kicker">ABOUT THIS PROJECT</p><h2>یک مرجع برای کنجکاوی‌های خودرویی</h2><p>این دانشنامه برای شناخت خودروها، فناوری‌ها و سازندگان ساخته می‌شود؛ نه برای فروش خودرو.</p></div></section>
+
+    <section class="quick-categories" id="quick-categories">
+      <div><p class="section-kicker">FIND YOUR DRIVE</p><h2 data-i18n="quickTitle">از کدوم دنیا خوشت میاد؟</h2></div>
+      <div class="category-chips">
+        <button class="selected" type="button" data-category="all" data-i18n="catAll">همهٔ ماشین‌ها</button>
+        <button type="button" data-category="Coupe" data-i18n="catCoupe">کوپه و اسپرت</button>
+        <button type="button" data-category="Sedan" data-i18n="catSedan">سدان</button>
+        <button type="button" data-category="Roadster" data-i18n="catRoadster">رودستر و کروک</button>
+        <button type="button" data-category="Electric" data-i18n="catElectric">ماشین‌های برقی</button>
+        <button type="button" data-category="track" data-i18n="catTrack">مخصوص پیست</button>
+        <button type="button" data-category="supercar" data-i18n="catSupercar">سوپراسپرت</button>
+      </div>
+    </section>
+
+    <section class="catalog-section" id="catalog">
+      <div class="section-heading">
+        <div><p class="section-kicker">THE COLLECTION</p><h2 data-i18n="collectionTitle">ماشین‌ها رو دقیق‌تر بشناس</h2><p class="section-subtitle" data-i18n="collectionSubtitle">مدل مورد علاقه‌ت رو پیدا کن و مشخصاتش رو ببین.</p></div>
+        <span class="result-count" id="resultCount" aria-live="polite"></span>
+      </div>
+      <div class="toolbar">
+        <label class="filter-label"><span data-i18n="brandFilter">برند</span><select id="brandFilter"><option value="all">همه برندها</option></select></label>
+        <label class="filter-label"><span data-i18n="sortLabel">مرتب‌سازی</span><select id="sortSelect"><option value="featured" data-i18n="sortFeatured">پیشنهادی</option><option value="name" data-i18n="sortName">اسم ماشین</option><option value="year" data-i18n="sortYear">سال ساخت</option><option value="power" data-i18n="sortPower">قدرت موتور</option></select></label>
+      </div>
+      <div class="car-grid" id="carGrid" aria-live="polite"></div>
+      <div class="empty-state hidden" id="emptyState"><div class="empty-icon" aria-hidden="true">⌕</div><h3 data-i18n="emptyTitle">ماشینی پیدا نشد</h3><p data-i18n="emptyText">عبارت جست‌وجو یا فیلترها رو عوض کن.</p><button class="button button-secondary" id="resetFilters" type="button" data-i18n="resetFilters">پاک کردن فیلترها</button></div>
+      <nav class="pagination" id="pagination" aria-label="Pagination"></nav>
+    </section>
+
+    <section class="editorial-row" id="editorial">
+      <div class="editorial-heading"><div><p class="section-kicker">THE DRIVER'S JOURNAL</p><h2 data-i18n="edTitle">بیشتر از یه ماشین</h2><p data-i18n="edText">جاده‌ها، تکنولوژی‌ها و لحظه‌هایی که یه ماشین رو خاص می‌کنن.</p></div></div>
+      <div class="editorial-cards">
+        <a class="editorial-card" href="#catalog" data-category="Sedan"><img src="assets/banners/Horizon.avif" alt="" loading="lazy"><span>OPEN ROAD</span><strong data-i18n="ed1Title">فراتر از افق</strong><small data-i18n="ed1Text">ماشین‌های مناسب سفرهای طولانی</small><i aria-hidden="true">↗</i></a>
+        <a class="editorial-card" href="#catalog" data-category="track"><img src="assets/banners/Track.avif" alt="" loading="lazy"><span>TRACK CULTURE</span><strong data-i18n="ed2Title">زندگی تو پیست</strong><small data-i18n="ed2Text">وقتی هر ثانیه مهمه</small><i aria-hidden="true">↗</i></a>
+        <a class="editorial-card" href="#catalog" data-category="Electric"><img src="assets/banners/The-Electric-Age.avif" alt="" loading="lazy"><span>THE NEXT ERA</span><strong data-i18n="ed3Title">عصر الکتریکی</strong><small data-i18n="ed3Text">یه نگاه به آیندهٔ پرفورمنس</small><i aria-hidden="true">↗</i></a>
+      </div>
+    </section>
+
+    <section class="brand-showcase" id="brand-showcase">
+      <div class="editorial-heading"><div><p class="section-kicker">ENGINEERING DNA</p><h2 data-i18n="shTitle">هر برند، یه فلسفه</h2><p data-i18n="shText">از مهندسی دقیق تا هیجان خالص مسابقه.</p></div></div>
+      <div class="showcase-grid">
+        <a href="#catalog" data-brand="BMW"><span>PRECISION &amp; BALANCE</span><b>BMW M</b><small data-i18n="sh1">پرفورمنس اسپرت با محوریت راننده</small><i aria-hidden="true">↗</i></a>
+        <a href="#catalog" data-brand="Mercedes-AMG"><span>LUXURY PERFORMANCE</span><b>Mercedes-AMG</b><small data-i18n="sh2">قدرت و راحتی تو یه تجربه</small><i aria-hidden="true">↗</i></a>
+        <a href="#catalog" data-brand="Porsche"><span>RACE-BRED ICON</span><b>Porsche</b><small data-i18n="sh3">ریشهٔ پیست، تو جاده</small><i aria-hidden="true">↗</i></a>
+        <a href="#catalog" data-brand="Audi"><span>PROGRESS THROUGH TECH</span><b>Audi Sport</b><small data-i18n="sh4">تکنولوژی و کشش هوشمند</small><i aria-hidden="true">↗</i></a>
+        <a href="#catalog" data-brand="Ferrari"><span>ITALIAN EMOTION</span><b>Ferrari</b><small data-i18n="sh5">هیجان و مهندسی ایتالیایی</small><i aria-hidden="true">↗</i></a>
+        <a href="#catalog" data-brand="Tesla"><span>ELECTRIC PERFORMANCE</span><b>Tesla</b><small data-i18n="sh6">شتاب الکتریکی و نرم‌افزار</small><i aria-hidden="true">↗</i></a>
+      </div>
+    </section>
+
+    <section class="about-strip" id="about">
+      <div class="about-icon" aria-hidden="true">◎</div>
+      <div><p class="section-kicker">ABOUT THIS PROJECT</p><h2 data-i18n="aboutStripTitle">جایی برای کنجکاوی‌های ماشینی</h2><p data-i18n="aboutStripText">این دانشنامه ساخته شده که ماشین‌ها، تکنولوژی‌ها و سازنده‌ها رو بهتر بشناسی؛ نه اینکه ماشین بفروشه.</p></div>
+    </section>
   </main>
 
-  <footer class="site-footer"><a class="footer-arm" href="index.html">ARM</a><p>ساخته‌شده برای کنجکاوی‌های خودرویی.</p><a href="#about">درباره پروژه</a><span>© <span id="yearNow"></span> A.R.M</span></footer>
+  <footer class="site-footer">
+    <a class="footer-arm" href="index.html">ARM</a>
+    <p data-i18n="footerMade">ساخته‌شده برای عاشق‌های ماشین.</p>
+    <a href="#about" data-i18n="footerAbout">دربارهٔ پروژه</a>
+    <span>© <span id="yearNow"></span> A.R.M</span>
+  </footer>
 </body>
 </html>
