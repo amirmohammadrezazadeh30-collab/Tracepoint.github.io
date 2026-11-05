@@ -1,4 +1,64 @@
 <!doctype html>
-<html lang="fa" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#080b11"><title>ورود | A.R.M</title><link rel="stylesheet" href="style.css"><script src="script.js" defer></script></head>
-<body><header class="site-header"><a class="brand arm-brand" href="index.html"><img class="arm-logo" src="assets/arm-logo.png" alt="ARM" onerror="if(!this.dataset.root){this.dataset.root='1';this.src='arm-logo.png'}else{this.style.display='none';this.nextElementSibling.style.display='grid'}"><span class="arm-fallback">ARM</span></a><a class="back-link" href="index.html">← بازگشت به سایت</a><div class="header-actions"><button class="language-toggle" id="languageToggle" type="button">EN</button></div></header>
-<main class="auth-shell"><section class="auth-card"><p class="section-kicker">A.R.M ACCOUNT</p><h1 id="authTitle">ورود به A.R.M</h1><p>برای نسخه نمایشی رابط ورود و ثبت‌نام.</p><div class="auth-tabs"><button id="loginTab" class="active" type="button">ورود</button><button id="signupTab" type="button">ثبت‌نام</button></div><form class="auth-form" id="authForm"><label id="nameField" class="hidden">نام نمایشی<input type="text" autocomplete="name" placeholder="نام شما"></label><label>ایمیل<input type="email" autocomplete="email" required placeholder="you@example.com"></label><label>رمز عبور<input type="password" autocomplete="current-password" minlength="8" required placeholder="حداقل ۸ کاراکتر"></label><button id="authSubmit" type="submit">ورود نمایشی</button></form><p id="authMessage" class="auth-message" role="status"></p><p class="detail-note">این صفحه هنوز احراز هویت واقعی ندارد و هیچ اطلاعاتی ذخیره یا ارسال نمی‌شود.</p></section></main><footer class="site-footer"><span>© <span id="yearNow"></span> A.R.M</span><span>Automotive Reference</span></footer></body></html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f6f8">
+  <title>ورود | A.R.M</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap">
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem("arm-theme") === "dark") document.documentElement.classList.add("dark-mode");
+        if (localStorage.getItem("arm-language") === "en") { document.documentElement.lang = "en"; document.documentElement.dir = "ltr"; }
+      } catch (e) {}
+    })();
+    function armLogoFail(img) {
+      if (!img.dataset.retry) { img.dataset.retry = "1"; img.src = "Tracepoint.png"; return; }
+      img.style.display = "none";
+      var f = img.nextElementSibling; if (f) f.style.display = "grid";
+    }
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="arm-header simple-header">
+    <a class="arm-brand" href="index.html" aria-label="A.R.M">
+      <img class="arm-logo" src="assets/Tracepoint.png" alt="A.R.M" onerror="armLogoFail(this)"><span class="arm-fallback">ARM</span>
+    </a>
+    <a class="back-link" href="index.html" data-i18n="backSite">→ بازگشت به سایت</a>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="تغییر حالت روشن و تاریک"><span class="theme-glyph">☾</span></button>
+      <button class="language-toggle" id="languageToggle" type="button" data-i18n-aria="langToggle" aria-label="تغییر زبان">EN</button>
+    </div>
+  </header>
+
+  <main class="auth-shell">
+    <section class="auth-card">
+      <p class="section-kicker">A.R.M ACCOUNT</p>
+      <h1 id="authTitle">ورود به A.R.M</h1>
+      <p data-i18n="authLead">نسخهٔ نمایشی صفحهٔ ورود و ثبت‌نام.</p>
+      <div class="auth-tabs">
+        <button id="loginTab" class="active" type="button" data-i18n="tabLogin">ورود</button>
+        <button id="signupTab" type="button" data-i18n="tabSignup">ثبت‌نام</button>
+      </div>
+      <form class="auth-form" id="authForm">
+        <label id="nameField" class="hidden"><span data-i18n="nameLabel">اسمت</span><input type="text" autocomplete="name" data-i18n-placeholder="namePlaceholder" placeholder="اسمت رو بنویس"></label>
+        <label><span data-i18n="emailLabel">ایمیل</span><input type="email" autocomplete="email" required placeholder="you@example.com" dir="ltr"></label>
+        <label><span data-i18n="passLabel">رمز عبور</span><input type="password" autocomplete="current-password" minlength="8" required data-i18n-placeholder="passPlaceholder" placeholder="حداقل ۸ کاراکتر"></label>
+        <button id="authSubmit" type="submit">ورود (نمایشی)</button>
+      </form>
+      <p id="authMessage" class="auth-message" role="status"></p>
+      <p class="detail-note" data-i18n="authNote">این صفحه هنوز ورود واقعی نداره و هیچ اطلاعاتی ذخیره یا فرستاده نمی‌شه.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span id="yearNow"></span> A.R.M</span>
+    <span>Automotive Reference</span>
+  </footer>
+</body>
+</html>
